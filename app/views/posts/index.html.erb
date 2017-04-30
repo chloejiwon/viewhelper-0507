@@ -1,0 +1,44 @@
+<h1>게시판</h1>
+<div>
+  <form method="post" action="/posts/create">
+    <input type="text" name="title" placeholder="제목"/>
+    <input type="text" name="content" placeholder="내용"/>
+    <input type="submit" value="게시글 작성 완료!">
+  </form>
+</div>
+<div>
+  <h3>게시글들</h3>
+  <% @posts.each do |post| %>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <!-- 게시글의 제목이 들어가는 부분 -->
+           <%= post.title %>
+        </h3>
+      </div>
+      <div class="panel-body">
+        <!-- 게시글의 내용이 들어가는 부분 -->
+        <%= post.content %>
+            <br />
+            <a href="/posts/destroy/<%= post.id %>">삭제</a>
+
+
+            <!-- 댓글다는 창이 있는 부분 -->
+            <form action="/posts/<%= post.id %>/comments/create" method="post">
+              <input type="text" name="content">
+              <input type="submit" value="댓글달기!">
+            </form>
+            <br />
+              <div>
+                <!-- 댓글들이 보이는 부분 -->
+                <ul class="list-group">
+                  <% post.comments.each do |comment| %>
+                    <li class="list-group-item"><%= comment.content %>
+                    <a href="/posts/<%= post.id %>/comments/destroy/<%= comment.id %>"><button>삭제</button></a>
+                    </li>
+                  <% end %>
+              </div>
+      </div>
+    </div>
+  <% end %>
+</div>
