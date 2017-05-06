@@ -1,0 +1,52 @@
+<h3>해시태그로 찾은거</h3>
+<div>
+  <% @posts.each do |post| %>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <!-- 게시글의 제목이 들어가는 부분 -->
+           <%= post.title %>
+        </h3>
+      </div>
+      <div class="panel-body">
+        <!-- 게시글의 내용이 들어가는 부분 -->
+        <%= post.content %>
+        
+        <% post.hashtags.each do |onetag| %>
+          <%=onetag.name%>
+        <%end%>
+            <br />
+             <%=link_to '삭제',{controller: :posts, action: :destroy, id: post.id } %>
+           
+
+            <!-- 댓글다는 창이 있는 부분 -->
+           <!-- <form action="/posts/<%= post.id %>/comments/create" method="post">
+              <input type="text" name="content">
+              <input type="submit" value="댓글달기!">
+            </form>-->
+            
+             <%= form_tag({controller: :comments, action: :create, post_id: post.id}) do %>
+              <%= text_field_tag :content %>
+              <%= submit_tag '댓글달기!'%>
+            <% end %>
+            
+            
+            <br />
+              <div>
+                <!-- 댓글들이 보이는 부분 -->
+                <ul class="list-group">
+                  <% post.comments.each do |comment| %>
+                    <li class="list-group-item"><%= comment.content %>
+                   <!-- <a href="/posts/<%= post.id %>/comments/destroy/<%= comment.id %>"><button>삭제</button></a>
+                    -->
+                     <%= link_to '삭제', [comment.post, comment],
+                     :method => :delete,
+                     data: { confirm: 'Are you sure?' }
+                    %>
+                    </li>
+                  <% end %>
+              </div>
+      </div>
+    </div>
+  <% end %>
+</div>

@@ -15,7 +15,9 @@ class CommentsController < ApplicationController
 
     # route에서 이름을 정해준 post_id로 게시글을 찾아주고 그 게시글에 달린 댓글들 중
     # id가 일치하는 것을 찾아서 삭제한다!
-    @comment = Post.find(params[:post_id]).comments.find(params[:id])
+    @post = Post.find(params[:post_id])
+    #@comment = Post.find(params[:post_id]).comments.find(params[:id])
+    @comment = Comment.find(params[:id])
     @comment.destroy
 
     redirect_to :back

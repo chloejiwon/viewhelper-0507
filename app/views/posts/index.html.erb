@@ -1,10 +1,33 @@
+
 <h1>게시판</h1>
+
 <div>
-  <form method="post" action="/posts/create">
+<!--  <form method="post" action="/posts/create">
     <input type="text" name="title" placeholder="제목"/>
     <input type="text" name="content" placeholder="내용"/>
-    <input type="submit" value="게시글 작성 완료!">
-  </form>
+    <input type="text" name="hashtags" placeholder="해시태그(,로구분)" />
+    <input type="submit" value="게시글 작성 완료!"><br>
+  </form>-->
+  
+  <%= form_tag({controller: :posts, action: :create}) do %>
+    <%= text_field_tag :title, nil, placeholder: "제목"%>
+    <%= text_field_tag :content, nil, placeholder: "내용"%>
+    <%= text_field_tag :hashtags,nil, placeholder: "해시태그(,로구분)"%>
+    <%= submit_tag '게시글 작성 완료!'%> 
+  <% end %>
+<h3>해시태그로 검색해보쟈</h3>
+<!--  <form method="post" action="/posts/find">
+    <input type="text" name="find_hash" placeholder="찾고싶은해시태그"/>
+     <input type="submit" value="검색!"><br>
+  </form>-->
+  
+  <%= form_tag({controller: :posts, action: :find}) do %>
+  
+  <%= text_field_tag :find_hash  %>
+  <%= submit_tag '검색!' %>
+  
+  <% end %>
+  
 </div>
 <div>
   <h3>게시글들</h3>
@@ -18,23 +41,44 @@
       </div>
       <div class="panel-body">
         <!-- 게시글의 내용이 들어가는 부분 -->
-        <%= post.content %>
+        <%= post.content %> 
+        
+        
+        <font color="gray">
+        <% post.hashtags.each do |onetag| %>
+          <%=onetag.name%>
+        <%end%>
+        </font>
             <br />
-            <a href="/posts/destroy/<%= post.id %>">삭제</a>
-
+            <%=link_to '삭제',{controller: :posts, action: :destroy, id: post.id } %>
+           
+           <!-- <a href="/posts/destroy/<%= post.id %>">삭제</a>-->
+    
 
             <!-- 댓글다는 창이 있는 부분 -->
-            <form action="/posts/<%= post.id %>/comments/create" method="post">
+        <!--    <form action="/posts/<%= post.id %>/comments/create" method="post">
               <input type="text" name="content">
               <input type="submit" value="댓글달기!">
-            </form>
+            </form>-->
+            
+            <%= form_tag({controller: :comments, action: :create, post_id: post.id}) do %>
+              <%= text_field_tag :content %>
+              <%= submit_tag '댓글달기!'%>
+            <% end %>
+            
             <br />
               <div>
                 <!-- 댓글들이 보이는 부분 -->
                 <ul class="list-group">
                   <% post.comments.each do |comment| %>
                     <li class="list-group-item"><%= comment.content %>
-                    <a href="/posts/<%= post.id %>/comments/destroy/<%= comment.id %>"><button>삭제</button></a>
+                   
+                   <!-- <a href="/posts/<%= post.id %>/comments/destroy/<%= comment.id %>"><button>삭제</button></a>
+                   -->
+                    <%= link_to '삭제', [comment.post, comment],
+                     :method => :delete,
+                     data: { confirm: 'Are you sure?' }
+                    %>
                     </li>
                   <% end %>
               </div>
