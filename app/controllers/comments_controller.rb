@@ -7,8 +7,9 @@ class CommentsController < ApplicationController
     @comment.content = params[:content]
     @comment.save
 
-    # 댓글 만들고 전 페이지로 돌아간다!
-    redirect_to :back
+    # 댓글 만들고 인덱스 페이지로 돌아간다!
+    # 백으로하면 find에서 문제생겨서..ㅠㅠ..물어봐야겠음 
+    redirect_to :root
   end
 
   def destroy
